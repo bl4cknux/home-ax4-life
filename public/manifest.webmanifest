@@ -1,0 +1,16 @@
+{
+  "name": "Hogar — Gestión familiar",
+  "short_name": "Hogar",
+  "description": "Panel familiar con finanzas, colegio, tareas del hogar, vehículos y viajes. Funciona sin conexión.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7f4ee",
+  "theme_color": "#1f4f45",
+  "lang": "es",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

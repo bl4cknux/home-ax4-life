@@ -10,33 +10,128 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AjustesRouteImport } from './routes/ajustes'
+import { Route as ColegioRouteImport } from './routes/colegio'
+import { Route as FinanzasRouteImport } from './routes/finanzas'
+import { Route as HogarRouteImport } from './routes/hogar'
+import { Route as MasRouteImport } from './routes/mas'
+import { Route as VehiculosRouteImport } from './routes/vehiculos'
+import { Route as ViajesRouteImport } from './routes/viajes'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AjustesRoute = AjustesRouteImport.update({
+  id: '/ajustes',
+  path: '/ajustes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ColegioRoute = ColegioRouteImport.update({
+  id: '/colegio',
+  path: '/colegio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FinanzasRoute = FinanzasRouteImport.update({
+  id: '/finanzas',
+  path: '/finanzas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HogarRoute = HogarRouteImport.update({
+  id: '/hogar',
+  path: '/hogar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MasRoute = MasRouteImport.update({
+  id: '/mas',
+  path: '/mas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VehiculosRoute = VehiculosRouteImport.update({
+  id: '/vehiculos',
+  path: '/vehiculos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ViajesRoute = ViajesRouteImport.update({
+  id: '/viajes',
+  path: '/viajes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/ajustes': typeof AjustesRoute
+  '/colegio': typeof ColegioRoute
+  '/finanzas': typeof FinanzasRoute
+  '/hogar': typeof HogarRoute
+  '/mas': typeof MasRoute
+  '/vehiculos': typeof VehiculosRoute
+  '/viajes': typeof ViajesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/ajustes': typeof AjustesRoute
+  '/colegio': typeof ColegioRoute
+  '/finanzas': typeof FinanzasRoute
+  '/hogar': typeof HogarRoute
+  '/mas': typeof MasRoute
+  '/vehiculos': typeof VehiculosRoute
+  '/viajes': typeof ViajesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/ajustes': typeof AjustesRoute
+  '/colegio': typeof ColegioRoute
+  '/finanzas': typeof FinanzasRoute
+  '/hogar': typeof HogarRoute
+  '/mas': typeof MasRoute
+  '/vehiculos': typeof VehiculosRoute
+  '/viajes': typeof ViajesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/ajustes'
+    | '/colegio'
+    | '/finanzas'
+    | '/hogar'
+    | '/mas'
+    | '/vehiculos'
+    | '/viajes'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/ajustes'
+    | '/colegio'
+    | '/finanzas'
+    | '/hogar'
+    | '/mas'
+    | '/vehiculos'
+    | '/viajes'
+  id:
+    | '__root__'
+    | '/'
+    | '/ajustes'
+    | '/colegio'
+    | '/finanzas'
+    | '/hogar'
+    | '/mas'
+    | '/vehiculos'
+    | '/viajes'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AjustesRoute: typeof AjustesRoute
+  ColegioRoute: typeof ColegioRoute
+  FinanzasRoute: typeof FinanzasRoute
+  HogarRoute: typeof HogarRoute
+  MasRoute: typeof MasRoute
+  VehiculosRoute: typeof VehiculosRoute
+  ViajesRoute: typeof ViajesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,22 +143,68 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ajustes': {
+      id: '/ajustes'
+      path: '/ajustes'
+      fullPath: '/ajustes'
+      preLoaderRoute: typeof AjustesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/colegio': {
+      id: '/colegio'
+      path: '/colegio'
+      fullPath: '/colegio'
+      preLoaderRoute: typeof ColegioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/finanzas': {
+      id: '/finanzas'
+      path: '/finanzas'
+      fullPath: '/finanzas'
+      preLoaderRoute: typeof FinanzasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/hogar': {
+      id: '/hogar'
+      path: '/hogar'
+      fullPath: '/hogar'
+      preLoaderRoute: typeof HogarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mas': {
+      id: '/mas'
+      path: '/mas'
+      fullPath: '/mas'
+      preLoaderRoute: typeof MasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vehiculos': {
+      id: '/vehiculos'
+      path: '/vehiculos'
+      fullPath: '/vehiculos'
+      preLoaderRoute: typeof VehiculosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/viajes': {
+      id: '/viajes'
+      path: '/viajes'
+      fullPath: '/viajes'
+      preLoaderRoute: typeof ViajesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AjustesRoute: AjustesRoute,
+  ColegioRoute: ColegioRoute,
+  FinanzasRoute: FinanzasRoute,
+  HogarRoute: HogarRoute,
+  MasRoute: MasRoute,
+  VehiculosRoute: VehiculosRoute,
+  ViajesRoute: ViajesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

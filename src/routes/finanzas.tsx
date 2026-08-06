@@ -112,6 +112,32 @@ function FinanzasPage() {
         </div>
       </SectionCard>
 
+      {kids.length > 0 ? (
+        <SectionCard title="Gasto mensual por hijo/a">
+          <ul className="space-y-3">
+            {perKid.map(({ kid, total }) => (
+              <li key={kid.id}>
+                <div className="mb-1 flex justify-between text-sm">
+                  <span>{kid.name}</span>
+                  <span className="font-semibold tabular-nums">{euro2(total)}</span>
+                </div>
+                <div className="h-2 rounded-full bg-secondary">
+                  <div
+                    className="h-2 rounded-full bg-primary"
+                    style={{ width: `${total === 0 ? 0 : Math.max(6, (total / maxKid) * 100)}%` }}
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Solo cuenta los gastos que tengan un hijo/a asociado al crearlos.
+          </p>
+        </SectionCard>
+      ) : null}
+
+
+
       <Tabs defaultValue="proximos">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="proximos">Vencimientos</TabsTrigger>

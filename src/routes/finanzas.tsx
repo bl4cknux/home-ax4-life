@@ -41,6 +41,7 @@ export const Route = createFileRoute("/finanzas")({
 function FinanzasPage() {
   const now = new Date();
   const all = useLive(() => movements.all(), [], []);
+  const kids = useLive(() => people.all(), [], []);
   const [showForm, setShowForm] = useState(false);
 
   const week = expandAll(all, startOfWeek(now, { weekStartsOn: 1 }), endOfWeek(now, { weekStartsOn: 1 }));
@@ -49,6 +50,21 @@ function FinanzasPage() {
   const monthTotals = totals(month);
   const categories = byCategory(month);
   const maxCategory = categories[0]?.total ?? 1;
+
+  const perKid = kids
+    .map((k) => ({
+      kid: k,
+      total: month
+        .filter(
+          (o) =>
+            o.movement.type === "expense" &&
+            o.movement.link?.kind === "person" &&
+            o.movement.link.id === k.id,
+        )
+        .reduce((sum, o) => sum + o.movement.amount, 0),
+    }))
+    .sort((a, b) => b.total - a.total);
+  const maxKid = perKid[0]?.total ?? 1;
 
   return (
     <div className="space-y-4">

@@ -174,19 +174,23 @@ export function ReminderForm({
   onDone,
   defaultScope,
   defaultLinkId,
+  defaultTag,
 }: {
   onDone: () => void;
   defaultScope?: EntityKind;
   defaultLinkId?: string;
+  defaultTag?: ReminderTag;
 }) {
   const [title, setTitle] = useState("");
   const [date, setDate] = useState(today());
   const [time, setTime] = useState("");
   const [scope, setScope] = useState<EntityKind>(defaultScope ?? "home");
+  const [tag, setTag] = useState<ReminderTag>(defaultTag ?? "hogar");
   const [linkId, setLinkId] = useState<string | undefined>(defaultLinkId);
-  const kids = useLive(() => import("@/lib/repos").then((m) => m.people.all()), [], []);
-  const cars = useLive(() => import("@/lib/repos").then((m) => m.vehicles.all()), [], []);
-  const options = scope === "person" ? kids : scope === "vehicle" ? cars : [];
+  const kids = useLive(() => people.all(), [], []);
+  const cars = useLive(() => vehicles.all(), [], []);
+  const options: { id: string; name: string }[] =
+    scope === "person" ? kids : scope === "vehicle" ? cars : [];
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -198,6 +202,7 @@ export function ReminderForm({
       title: title.trim(),
       date,
       scope,
+      tag,
       repeat: "once",
       done: false,
       ...(time ? { time } : {}),
@@ -220,6 +225,18 @@ export function ReminderForm({
         <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
       </div>
       <div className="grid grid-cols-2 gap-2">
+        <Select value={tag} onValueChange={(v) => setTag(v as ReminderTag)}>
+          <SelectTrigger>
+            <SelectValue placeholder="Etiqueta" />
+          </SelectTrigger>
+          <SelectContent>
+            {REMINDER_TAGS.map((t) => (
+              <SelectItem key={t.value} value={t.value}>
+                {t.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <Select
           value={scope}
           onValueChange={(v) => {
@@ -238,21 +255,21 @@ export function ReminderForm({
             ))}
           </SelectContent>
         </Select>
-        {options.length > 0 ? (
-          <Select value={linkId ?? (undefined as unknown as string)} onValueChange={setLinkId}>
-            <SelectTrigger>
-              <SelectValue placeholder="Elegir" />
-            </SelectTrigger>
-            <SelectContent>
-              {options.map((o) => (
-                <SelectItem key={o.id} value={o.id}>
-                  {o.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        ) : null}
       </div>
+      {options.length > 0 ? (
+        <Select value={linkId ?? (undefined as unknown as string)} onValueChange={setLinkId}>
+          <SelectTrigger>
+            <SelectValue placeholder="Elegir" />
+          </SelectTrigger>
+          <SelectContent>
+            {options.map((o) => (
+              <SelectItem key={o.id} value={o.id}>
+                {o.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ) : null}
       <Button type="submit" className="w-full rounded-xl">
         Guardar
       </Button>

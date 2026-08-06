@@ -15,7 +15,7 @@ import { SectionCard, EmptyHint } from "@/components/SectionCard";
 import { MovementForm } from "@/components/QuickAdd";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { movements } from "@/lib/repos";
+import { movements, people } from "@/lib/repos";
 import { useLive } from "@/lib/use-data";
 import { RECURRENCE_LABELS, byCategory, euro, euro2, expandAll, totals } from "@/lib/finance";
 
@@ -41,6 +41,7 @@ export const Route = createFileRoute("/finanzas")({
 function FinanzasPage() {
   const now = new Date();
   const all = useLive(() => movements.all(), [], []);
+  const kids = useLive(() => people.all(), [], []);
   const [showForm, setShowForm] = useState(false);
 
   const week = expandAll(all, startOfWeek(now, { weekStartsOn: 1 }), endOfWeek(now, { weekStartsOn: 1 }));
@@ -49,6 +50,21 @@ function FinanzasPage() {
   const monthTotals = totals(month);
   const categories = byCategory(month);
   const maxCategory = categories[0]?.total ?? 1;
+
+  const perKid = kids
+    .map((k) => ({
+      kid: k,
+      total: month
+        .filter(
+          (o) =>
+            o.movement.type === "expense" &&
+            o.movement.link?.kind === "person" &&
+            o.movement.link.id === k.id,
+        )
+        .reduce((sum, o) => sum + o.movement.amount, 0),
+    }))
+    .sort((a, b) => b.total - a.total);
+  const maxKid = perKid[0]?.total ?? 1;
 
   return (
     <div className="space-y-4">
@@ -95,6 +111,32 @@ function FinanzasPage() {
           </span>
         </div>
       </SectionCard>
+
+      {kids.length > 0 ? (
+        <SectionCard title="Gasto mensual por hijo/a">
+          <ul className="space-y-3">
+            {perKid.map(({ kid, total }) => (
+              <li key={kid.id}>
+                <div className="mb-1 flex justify-between text-sm">
+                  <span>{kid.name}</span>
+                  <span className="font-semibold tabular-nums">{euro2(total)}</span>
+                </div>
+                <div className="h-2 rounded-full bg-secondary">
+                  <div
+                    className="h-2 rounded-full bg-primary"
+                    style={{ width: `${total === 0 ? 0 : Math.max(6, (total / maxKid) * 100)}%` }}
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Solo cuenta los gastos que tengan un hijo/a asociado al crearlos.
+          </p>
+        </SectionCard>
+      ) : null}
+
+
 
       <Tabs defaultValue="proximos">
         <TabsList className="grid w-full grid-cols-3">

@@ -14,9 +14,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CATEGORIES, RECURRENCE_LABELS } from "@/lib/finance";
-import { movements, projects, reminders, tasks, trips } from "@/lib/repos";
+import { REMINDER_TAGS } from "@/lib/reminders-meta";
+import { movements, people, projects, reminders, tasks, trips, vehicles } from "@/lib/repos";
 import { useLive } from "@/lib/use-data";
-import type { EntityKind, Recurrence } from "@/lib/db";
+import type { EntityKind, Recurrence, ReminderTag } from "@/lib/db";
 
 const today = () => format(new Date(), "yyyy-MM-dd");
 
@@ -61,6 +62,8 @@ export function MovementForm({ onDone }: { onDone: () => void }) {
   const [date, setDate] = useState(today());
   const [recurrence, setRecurrence] = useState<Recurrence>("monthly");
   const [type, setType] = useState<"expense" | "income">("expense");
+  const [personId, setPersonId] = useState<string>("none");
+  const kids = useLive(() => people.all(), [], []);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +72,15 @@ export function MovementForm({ onDone }: { onDone: () => void }) {
       toast.error("Pon un concepto y un importe");
       return;
     }
-    await movements.add({ title: title.trim(), amount: value, type, category, date, recurrence });
+    await movements.add({
+      title: title.trim(),
+      amount: value,
+      type,
+      category,
+      date,
+      recurrence,
+      ...(personId !== "none" ? { link: { kind: "person" as const, id: personId } } : {}),
+    });
     toast.success("Guardado");
     onDone();
   };
@@ -129,6 +140,21 @@ export function MovementForm({ onDone }: { onDone: () => void }) {
           </SelectContent>
         </Select>
       </div>
+      {kids.length > 0 ? (
+        <Select value={personId} onValueChange={setPersonId}>
+          <SelectTrigger>
+            <SelectValue placeholder="Sin hijo/a asociado" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">Sin hijo/a asociado</SelectItem>
+            {kids.map((k) => (
+              <SelectItem key={k.id} value={k.id}>
+                {k.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ) : null}
       <Button type="submit" className="w-full rounded-xl">
         Guardar
       </Button>
@@ -148,19 +174,23 @@ export function ReminderForm({
   onDone,
   defaultScope,
   defaultLinkId,
+  defaultTag,
 }: {
   onDone: () => void;
   defaultScope?: EntityKind;
   defaultLinkId?: string;
+  defaultTag?: ReminderTag;
 }) {
   const [title, setTitle] = useState("");
   const [date, setDate] = useState(today());
   const [time, setTime] = useState("");
   const [scope, setScope] = useState<EntityKind>(defaultScope ?? "home");
+  const [tag, setTag] = useState<ReminderTag>(defaultTag ?? "hogar");
   const [linkId, setLinkId] = useState<string | undefined>(defaultLinkId);
-  const kids = useLive(() => import("@/lib/repos").then((m) => m.people.all()), [], []);
-  const cars = useLive(() => import("@/lib/repos").then((m) => m.vehicles.all()), [], []);
-  const options = scope === "person" ? kids : scope === "vehicle" ? cars : [];
+  const kids = useLive(() => people.all(), [], []);
+  const cars = useLive(() => vehicles.all(), [], []);
+  const options: { id: string; name: string }[] =
+    scope === "person" ? kids : scope === "vehicle" ? cars : [];
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -172,6 +202,7 @@ export function ReminderForm({
       title: title.trim(),
       date,
       scope,
+      tag,
       repeat: "once",
       done: false,
       ...(time ? { time } : {}),
@@ -194,6 +225,18 @@ export function ReminderForm({
         <Input type="time" value={time} onChange={(e) => setTime(e.target.value)} />
       </div>
       <div className="grid grid-cols-2 gap-2">
+        <Select value={tag} onValueChange={(v) => setTag(v as ReminderTag)}>
+          <SelectTrigger>
+            <SelectValue placeholder="Etiqueta" />
+          </SelectTrigger>
+          <SelectContent>
+            {REMINDER_TAGS.map((t) => (
+              <SelectItem key={t.value} value={t.value}>
+                {t.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <Select
           value={scope}
           onValueChange={(v) => {
@@ -212,21 +255,21 @@ export function ReminderForm({
             ))}
           </SelectContent>
         </Select>
-        {options.length > 0 ? (
-          <Select value={linkId ?? (undefined as unknown as string)} onValueChange={setLinkId}>
-            <SelectTrigger>
-              <SelectValue placeholder="Elegir" />
-            </SelectTrigger>
-            <SelectContent>
-              {options.map((o) => (
-                <SelectItem key={o.id} value={o.id}>
-                  {o.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        ) : null}
       </div>
+      {options.length > 0 ? (
+        <Select value={linkId ?? (undefined as unknown as string)} onValueChange={setLinkId}>
+          <SelectTrigger>
+            <SelectValue placeholder="Elegir" />
+          </SelectTrigger>
+          <SelectContent>
+            {options.map((o) => (
+              <SelectItem key={o.id} value={o.id}>
+                {o.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ) : null}
       <Button type="submit" className="w-full rounded-xl">
         Guardar
       </Button>

@@ -22,6 +22,8 @@ export interface Person {
   id: string;
   name: string;
   color: string;
+  /** "hijo" | "hija" — solo para mostrar el parentesco en los recordatorios. */
+  gender?: "hijo" | "hija";
   schoolName?: string;
   className?: string;
   tutor?: string;
@@ -58,6 +60,16 @@ export interface Movement {
   createdAt: string;
 }
 
+export type ReminderTag =
+  | "colegio"
+  | "medico"
+  | "vacunas"
+  | "hogar"
+  | "coche"
+  | "trabajo"
+  | "personal"
+  | "otro";
+
 export interface Reminder {
   id: string;
   title: string;
@@ -65,6 +77,8 @@ export interface Reminder {
   time?: string;
   scope: EntityKind;
   linkId?: string;
+  /** Etiqueta visible: Colegio, Médico, Vacunas… */
+  tag?: ReminderTag;
   repeat: Recurrence | "weekly";
   done: boolean;
   createdAt: string;

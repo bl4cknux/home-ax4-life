@@ -61,6 +61,8 @@ export function MovementForm({ onDone }: { onDone: () => void }) {
   const [date, setDate] = useState(today());
   const [recurrence, setRecurrence] = useState<Recurrence>("monthly");
   const [type, setType] = useState<"expense" | "income">("expense");
+  const [personId, setPersonId] = useState<string>("none");
+  const kids = useLive(() => people.all(), [], []);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,7 +71,15 @@ export function MovementForm({ onDone }: { onDone: () => void }) {
       toast.error("Pon un concepto y un importe");
       return;
     }
-    await movements.add({ title: title.trim(), amount: value, type, category, date, recurrence });
+    await movements.add({
+      title: title.trim(),
+      amount: value,
+      type,
+      category,
+      date,
+      recurrence,
+      ...(personId !== "none" ? { link: { kind: "person" as const, id: personId } } : {}),
+    });
     toast.success("Guardado");
     onDone();
   };
@@ -129,6 +139,21 @@ export function MovementForm({ onDone }: { onDone: () => void }) {
           </SelectContent>
         </Select>
       </div>
+      {kids.length > 0 ? (
+        <Select value={personId} onValueChange={setPersonId}>
+          <SelectTrigger>
+            <SelectValue placeholder="Sin hijo/a asociado" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="none">Sin hijo/a asociado</SelectItem>
+            {kids.map((k) => (
+              <SelectItem key={k.id} value={k.id}>
+                {k.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ) : null}
       <Button type="submit" className="w-full rounded-xl">
         Guardar
       </Button>

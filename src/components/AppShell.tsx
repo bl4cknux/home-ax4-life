@@ -7,8 +7,8 @@ import { seedIfEmpty } from "@/lib/seed";
 
 const NAV = [
   { to: "/", label: "Inicio", icon: Home },
-  { to: "/finanzas", label: "Finanzas", icon: Wallet },
   { to: "/colegio", label: "Colegio", icon: GraduationCap },
+  { to: "/finanzas", label: "Finanzas", icon: Wallet },
   { to: "/mas", label: "Más", icon: LayoutGrid },
 ] as const;
 

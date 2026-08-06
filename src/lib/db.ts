@@ -22,6 +22,8 @@ export interface Person {
   id: string;
   name: string;
   color: string;
+  /** "hijo" | "hija" — solo para mostrar el parentesco en los recordatorios. */
+  gender?: "hijo" | "hija";
   schoolName?: string;
   className?: string;
   tutor?: string;

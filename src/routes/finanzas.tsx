@@ -15,7 +15,7 @@ import { SectionCard, EmptyHint } from "@/components/SectionCard";
 import { MovementForm } from "@/components/QuickAdd";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { movements } from "@/lib/repos";
+import { movements, people } from "@/lib/repos";
 import { useLive } from "@/lib/use-data";
 import { RECURRENCE_LABELS, byCategory, euro, euro2, expandAll, totals } from "@/lib/finance";
 

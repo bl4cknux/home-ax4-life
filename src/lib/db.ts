@@ -58,6 +58,16 @@ export interface Movement {
   createdAt: string;
 }
 
+export type ReminderTag =
+  | "colegio"
+  | "medico"
+  | "vacunas"
+  | "hogar"
+  | "coche"
+  | "trabajo"
+  | "personal"
+  | "otro";
+
 export interface Reminder {
   id: string;
   title: string;
@@ -65,6 +75,8 @@ export interface Reminder {
   time?: string;
   scope: EntityKind;
   linkId?: string;
+  /** Etiqueta visible: Colegio, Médico, Vacunas… */
+  tag?: ReminderTag;
   repeat: Recurrence | "weekly";
   done: boolean;
   createdAt: string;

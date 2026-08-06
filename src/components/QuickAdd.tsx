@@ -14,9 +14,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CATEGORIES, RECURRENCE_LABELS } from "@/lib/finance";
-import { movements, projects, reminders, tasks, trips } from "@/lib/repos";
+import { REMINDER_TAGS } from "@/lib/reminders-meta";
+import { movements, people, projects, reminders, tasks, trips, vehicles } from "@/lib/repos";
 import { useLive } from "@/lib/use-data";
-import type { EntityKind, Recurrence } from "@/lib/db";
+import type { EntityKind, Recurrence, ReminderTag } from "@/lib/db";
 
 const today = () => format(new Date(), "yyyy-MM-dd");
 

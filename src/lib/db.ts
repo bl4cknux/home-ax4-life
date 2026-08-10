@@ -194,6 +194,8 @@ export const TABLE_NAMES = [
   "projects",
   "trips",
   "tasks",
+  "products",
+  "shopping",
 ] as const;
 
 export type TableName = (typeof TABLE_NAMES)[number];

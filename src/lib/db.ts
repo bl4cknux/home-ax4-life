@@ -117,6 +117,26 @@ export interface Task {
   createdAt: string;
 }
 
+/** Producto del catálogo de la compra (se reutiliza con un toque). */
+export interface Product {
+  id: string;
+  name: string;
+  category: string;
+  /** true = forma parte de la plantilla de productos fijos. */
+  staple: boolean;
+  createdAt: string;
+}
+
+/** Línea de la lista de la compra actual. */
+export interface ShoppingItem {
+  id: string;
+  productId?: string;
+  name: string;
+  qty: number;
+  done: boolean;
+  createdAt: string;
+}
+
 export interface MetaRow {
   key: string;
   value: unknown;
@@ -131,6 +151,8 @@ export class HogarDB extends Dexie {
   projects!: Table<Project, string>;
   trips!: Table<Trip, string>;
   tasks!: Table<Task, string>;
+  products!: Table<Product, string>;
+  shopping!: Table<ShoppingItem, string>;
   meta!: Table<MetaRow, string>;
 
   constructor() {
@@ -146,8 +168,13 @@ export class HogarDB extends Dexie {
       tasks: "id, done, kind",
       meta: "key",
     });
+    this.version(2).stores({
+      products: "id, name, category, staple",
+      shopping: "id, productId, done",
+    });
   }
 }
+
 
 let _db: HogarDB | null = null;
 
@@ -167,6 +194,8 @@ export const TABLE_NAMES = [
   "projects",
   "trips",
   "tasks",
+  "products",
+  "shopping",
 ] as const;
 
 export type TableName = (typeof TABLE_NAMES)[number];

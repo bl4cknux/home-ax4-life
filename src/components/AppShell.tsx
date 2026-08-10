@@ -3,7 +3,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import { Home, Wallet, GraduationCap, LayoutGrid, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { QuickAdd } from "./QuickAdd";
-import { seedIfEmpty } from "@/lib/seed";
+import { seedIfEmpty, seedProductsIfEmpty } from "@/lib/seed";
 
 const NAV = [
   { to: "/", label: "Inicio", icon: Home },
@@ -18,6 +18,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     void seedIfEmpty();
+    void seedProductsIfEmpty();
   }, []);
 
   return (

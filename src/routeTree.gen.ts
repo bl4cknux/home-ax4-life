@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AjustesRouteImport } from './routes/ajustes'
 import { Route as ColegioRouteImport } from './routes/colegio'
+import { Route as CompraRouteImport } from './routes/compra'
 import { Route as FinanzasRouteImport } from './routes/finanzas'
 import { Route as HogarRouteImport } from './routes/hogar'
 import { Route as MasRouteImport } from './routes/mas'
@@ -31,6 +32,11 @@ const AjustesRoute = AjustesRouteImport.update({
 const ColegioRoute = ColegioRouteImport.update({
   id: '/colegio',
   path: '/colegio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompraRoute = CompraRouteImport.update({
+  id: '/compra',
+  path: '/compra',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FinanzasRoute = FinanzasRouteImport.update({
@@ -63,6 +69,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ajustes': typeof AjustesRoute
   '/colegio': typeof ColegioRoute
+  '/compra': typeof CompraRoute
   '/finanzas': typeof FinanzasRoute
   '/hogar': typeof HogarRoute
   '/mas': typeof MasRoute
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ajustes': typeof AjustesRoute
   '/colegio': typeof ColegioRoute
+  '/compra': typeof CompraRoute
   '/finanzas': typeof FinanzasRoute
   '/hogar': typeof HogarRoute
   '/mas': typeof MasRoute
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/ajustes': typeof AjustesRoute
   '/colegio': typeof ColegioRoute
+  '/compra': typeof CompraRoute
   '/finanzas': typeof FinanzasRoute
   '/hogar': typeof HogarRoute
   '/mas': typeof MasRoute
@@ -96,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/ajustes'
     | '/colegio'
+    | '/compra'
     | '/finanzas'
     | '/hogar'
     | '/mas'
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/ajustes'
     | '/colegio'
+    | '/compra'
     | '/finanzas'
     | '/hogar'
     | '/mas'
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/'
     | '/ajustes'
     | '/colegio'
+    | '/compra'
     | '/finanzas'
     | '/hogar'
     | '/mas'
@@ -127,6 +139,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AjustesRoute: typeof AjustesRoute
   ColegioRoute: typeof ColegioRoute
+  CompraRoute: typeof CompraRoute
   FinanzasRoute: typeof FinanzasRoute
   HogarRoute: typeof HogarRoute
   MasRoute: typeof MasRoute
@@ -155,6 +168,13 @@ declare module '@tanstack/react-router' {
       path: '/colegio'
       fullPath: '/colegio'
       preLoaderRoute: typeof ColegioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compra': {
+      id: '/compra'
+      path: '/compra'
+      fullPath: '/compra'
+      preLoaderRoute: typeof CompraRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/finanzas': {
@@ -199,6 +219,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AjustesRoute: AjustesRoute,
   ColegioRoute: ColegioRoute,
+  CompraRoute: CompraRoute,
   FinanzasRoute: FinanzasRoute,
   HogarRoute: HogarRoute,
   MasRoute: MasRoute,

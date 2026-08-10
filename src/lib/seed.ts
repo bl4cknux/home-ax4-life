@@ -271,3 +271,44 @@ export async function seedIfEmpty(): Promise<void> {
 
   await db.meta.put({ key: "seeded", value: stamp() });
 }
+
+const STAPLES = [
+  "Leche",
+  "Pan",
+  "Huevos",
+  "Café",
+  "Fruta",
+  "Yogures",
+  "Papel de cocina",
+  "Detergente",
+];
+
+const EXTRAS = ["Pollo", "Arroz", "Pasta", "Tomate frito", "Queso", "Champú", "Agua", "Aceite"];
+
+/** Catálogo inicial de la compra (independiente del seed general). */
+export async function seedProductsIfEmpty(): Promise<void> {
+  const db = getDb();
+  if (!db) return;
+  const flag = await db.meta.get("seeded-products");
+  if (flag) return;
+  const count = await db.products.count();
+  if (count === 0) {
+    await db.products.bulkAdd([
+      ...STAPLES.map((name) => ({
+        id: uid(),
+        name,
+        category: "Despensa",
+        staple: true,
+        createdAt: stamp(),
+      })),
+      ...EXTRAS.map((name) => ({
+        id: uid(),
+        name,
+        category: "Despensa",
+        staple: false,
+        createdAt: stamp(),
+      })),
+    ]);
+  }
+  await db.meta.put({ key: "seeded-products", value: stamp() });
+}

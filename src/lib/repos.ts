@@ -2,9 +2,11 @@ import { getDb, uid, TABLE_NAMES, type TableName } from "./db";
 import type {
   Movement,
   Person,
+  Product,
   Project,
   Reminder,
   ScheduleItem,
+  ShoppingItem,
   Task,
   Trip,
   Vehicle,

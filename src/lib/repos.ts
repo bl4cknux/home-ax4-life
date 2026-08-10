@@ -108,3 +108,58 @@ export async function clearAll() {
   await Promise.all(TABLE_NAMES.map((name) => instance.table(name as TableName).clear()));
   await instance.meta.clear();
 }
+
+export const products = {
+  all: () => db().products.orderBy("name").toArray(),
+  add: (p: Omit<Product, "id" | "createdAt">) =>
+    db().products.add({ ...p, id: uid(), createdAt: stamp() }),
+  update: (id: string, changes: Partial<Product>) => db().products.update(id, changes),
+  remove: async (id: string) => {
+    const lines = await db().shopping.where("productId").equals(id).toArray();
+    await db().shopping.bulkDelete(lines.map((l) => l.id));
+    await db().products.delete(id);
+  },
+};
+
+export const shopping = {
+  all: () => db().shopping.toArray(),
+  /** Un toque: si ya está en la lista suma 1, si no la crea. */
+  addOrIncrement: async (product: { id?: string; name: string }, step = 1) => {
+    const list = await db().shopping.toArray();
+    const existing = list.find((l) =>
+      product.id
+        ? l.productId === product.id
+        : l.name.toLowerCase() === product.name.trim().toLowerCase(),
+    );
+    if (existing) {
+      const qty = Math.max(0, existing.qty + step);
+      if (qty === 0) return db().shopping.delete(existing.id);
+      return db().shopping.update(existing.id, { qty, done: false });
+    }
+    if (step <= 0) return;
+    return db().shopping.add({
+      id: uid(),
+      name: product.name.trim(),
+      qty: step,
+      done: false,
+      createdAt: stamp(),
+      ...(product.id ? { productId: product.id } : {}),
+    });
+  },
+  setQty: async (id: string, qty: number) => {
+    if (qty <= 0) return db().shopping.delete(id);
+    return db().shopping.update(id, { qty });
+  },
+  toggle: async (id: string) => {
+    const current = await db().shopping.get(id);
+    if (current) await db().shopping.update(id, { done: !current.done });
+  },
+  remove: (id: string) => db().shopping.delete(id),
+  clearDone: async () => {
+    const list = await db().shopping.toArray();
+    await db().shopping.bulkDelete(list.filter((l) => l.done).map((l) => l.id));
+  },
+  clearAllLines: async () => {
+    await db().shopping.clear();
+  },
+};

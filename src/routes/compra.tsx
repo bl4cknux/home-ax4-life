@@ -32,8 +32,6 @@ export const Route = createFileRoute("/compra")({
   component: CompraPage,
 });
 
-const CATEGORIES = ["Fresco", "Despensa", "Limpieza", "Bebida", "Higiene", "Otros"];
-
 function CompraPage() {
   const catalog = useLive(() => products.all(), [], []);
   const lines = useLive(() => shopping.all(), [], []);
@@ -151,8 +149,7 @@ function CompraPage() {
         )}
         {manage ? (
           <p className="mt-3 text-xs text-muted-foreground">
-            La estrella marca los productos fijos de tu plantilla ({CATEGORIES.length > 0 ? "" : ""}
-            {staples.length} marcados).
+            La estrella marca los productos fijos de tu plantilla ({staples.length} marcados).
           </p>
         ) : null}
       </SectionCard>

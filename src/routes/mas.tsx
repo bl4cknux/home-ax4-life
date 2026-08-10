@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { format, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
-import { Car, Hammer, Plane, Settings, Trash2 } from "lucide-react";
+import { Car, Hammer, Plane, Settings, ShoppingCart, Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/AppShell";
 import { SectionCard, EmptyHint } from "@/components/SectionCard";
 import { reminders } from "@/lib/repos";
@@ -27,6 +27,7 @@ export const Route = createFileRoute("/mas")({
 });
 
 const LINKS = [
+  { to: "/compra", label: "Compra", icon: ShoppingCart },
   { to: "/hogar", label: "Hogar", icon: Hammer },
   { to: "/vehiculos", label: "Vehículos", icon: Car },
   { to: "/viajes", label: "Viajes", icon: Plane },

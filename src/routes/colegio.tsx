@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { createFileRoute } from "@tanstack/react-router";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -315,7 +316,12 @@ function ColegioPage() {
                     </span>
                     <button
                       type="button"
-                      onClick={() => void reminders.toggle(r.id)}
+                      onClick={() => void reminders.toggle(r.id).then((next) => {
+                    if (next)
+                      toast.success(
+                        `Hecho. Siguiente: ${format(parseISO(next), "d MMM", { locale: es })}`,
+                      );
+                  })}
                       className="text-xs font-semibold text-primary"
                     >
                       Hecho

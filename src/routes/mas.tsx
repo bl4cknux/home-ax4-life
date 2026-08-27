@@ -81,7 +81,12 @@ function MasPage() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => void reminders.toggle(r.id)}
+                  onClick={() => void reminders.toggle(r.id).then((next) => {
+                    if (next)
+                      toast.success(
+                        `Hecho. Siguiente: ${format(parseISO(next), "d MMM", { locale: es })}`,
+                      );
+                  })}
                   className="text-xs font-semibold text-primary"
                 >
                   Hecho

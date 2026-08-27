@@ -92,7 +92,12 @@ function Dashboard() {
               <li key={r.id}>
                 <button
                   type="button"
-                  onClick={() => void reminders.toggle(r.id)}
+                  onClick={() => void reminders.toggle(r.id).then((next) => {
+                    if (next)
+                      toast.success(
+                        `Hecho. Siguiente: ${format(parseISO(next), "d MMM", { locale: es })}`,
+                      );
+                  })}
                   className="flex w-full items-center gap-3 py-2.5 text-left"
                 >
                   <Circle className={cn("h-5 w-5 shrink-0", URGENCY_TEXT[urgency(r.date)])} />

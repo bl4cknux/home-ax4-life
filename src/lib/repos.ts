@@ -62,13 +62,27 @@ export const reminders = {
   all: () => db().reminders.toArray(),
   add: (r: Omit<Reminder, "id" | "createdAt">) =>
     db().reminders.add({ ...r, id: uid(), createdAt: stamp() }),
-  toggle: async (id: string) => {
+  /**
+   * Marcar hecho. Si el recordatorio es periódico no se archiva: salta
+   * automáticamente a su siguiente fecha. Devuelve esa fecha si la hay.
+   */
+  toggle: async (id: string): Promise<string | null> => {
     const current = await db().reminders.get(id);
-    if (current) await db().reminders.update(id, { done: !current.done });
+    if (!current) return null;
+    if (!current.done) {
+      const next = nextOccurrence(current.date, current.repeat);
+      if (next) {
+        await db().reminders.update(id, { date: next, done: false });
+        return next;
+      }
+    }
+    await db().reminders.update(id, { done: !current.done });
+    return null;
   },
   update: (id: string, changes: Partial<Reminder>) => db().reminders.update(id, changes),
   remove: (id: string) => db().reminders.delete(id),
 };
+
 
 export const projects = {
   all: () => db().projects.toArray(),

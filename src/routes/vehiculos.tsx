@@ -4,6 +4,7 @@ import { differenceInCalendarDays, format, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
 import { Car, Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/AppShell";
+import { ConfirmDelete } from "@/components/ConfirmDelete";
 import { SectionCard, EmptyHint } from "@/components/SectionCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -78,14 +79,11 @@ function VehiculosPage() {
             key={v.id}
             title={v.name}
             action={
-              <button
-                type="button"
-                aria-label={`Borrar ${v.name}`}
-                onClick={() => void vehicles.remove(v.id)}
-                className="text-muted-foreground"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
+              <ConfirmDelete
+                title={`¿Borrar ${v.name}?`}
+                description="Se eliminará el vehículo. Esta acción no se puede deshacer."
+                onConfirm={() => vehicles.remove(v.id)}
+              />
             }
           >
             <div className="mb-3 flex items-center gap-2 text-sm text-muted-foreground">

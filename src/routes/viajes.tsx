@@ -4,6 +4,7 @@ import { differenceInCalendarDays, format, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
 import { Check, Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/AppShell";
+import { ConfirmDelete } from "@/components/ConfirmDelete";
 import { SectionCard, EmptyHint } from "@/components/SectionCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -76,14 +77,11 @@ function ViajesPage() {
             key={t.id}
             title={`${t.destination} · ${days > 0 ? `en ${days} días` : "en curso"}`}
             action={
-              <button
-                type="button"
-                aria-label={`Borrar ${t.destination}`}
-                onClick={() => void trips.remove(t.id)}
-                className="text-muted-foreground"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
+              <ConfirmDelete
+                title={`¿Borrar el viaje a ${t.destination}?`}
+                description="Se borrarán también sus tareas asociadas."
+                onConfirm={() => trips.remove(t.id)}
+              />
             }
           >
             <p className="text-sm text-muted-foreground">

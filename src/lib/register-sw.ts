@@ -35,7 +35,7 @@ export function registerServiceWorker() {
     !import.meta.env.PROD ||
     window.self !== window.top ||
     blockedHost(window.location.hostname) ||
-    new URLSearchParams(window.location.search).has("sw") ;
+    new URLSearchParams(window.location.search).get("sw") === "off";
 
   if (refused) {
     void unregisterExisting();

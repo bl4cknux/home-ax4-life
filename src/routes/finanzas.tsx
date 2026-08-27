@@ -9,8 +9,8 @@ import {
   startOfWeek,
 } from "date-fns";
 import { es } from "date-fns/locale";
-import { Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/AppShell";
+import { ConfirmDelete } from "@/components/ConfirmDelete";
 import { SectionCard, EmptyHint } from "@/components/SectionCard";
 import { MovementForm } from "@/components/QuickAdd";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -214,14 +214,11 @@ function FinanzasPage() {
                       </p>
                     </div>
                     <span className="font-semibold tabular-nums">{euro(m.amount)}</span>
-                    <button
-                      type="button"
-                      aria-label={`Borrar ${m.title}`}
-                      onClick={() => void movements.remove(m.id)}
-                      className="text-muted-foreground"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
+                    <ConfirmDelete
+                      title={`¿Borrar "${m.title}"?`}
+                      description="Se eliminará el movimiento y sus repeticiones futuras."
+                      onConfirm={() => movements.remove(m.id)}
+                    />
                   </li>
                 ))}
               </ul>

@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { format, parseISO } from "date-fns";
+import { toast } from "sonner";
 import { es } from "date-fns/locale";
 import { Car, Hammer, Plane, Settings, ShoppingCart, Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/AppShell";
@@ -81,7 +82,12 @@ function MasPage() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => void reminders.toggle(r.id)}
+                  onClick={() => void reminders.toggle(r.id).then((next) => {
+                    if (next)
+                      toast.success(
+                        `Hecho. Siguiente: ${format(parseISO(next), "d MMM", { locale: es })}`,
+                      );
+                  })}
                   className="text-xs font-semibold text-primary"
                 >
                   Hecho

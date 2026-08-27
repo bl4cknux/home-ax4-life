@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/AppShell";
+import { ConfirmDelete } from "@/components/ConfirmDelete";
 import { EmptyHint } from "@/components/SectionCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
@@ -82,14 +82,10 @@ function HogarPage() {
                 <article key={p.id} className="rounded-3xl border border-border bg-card p-4">
                   <div className="flex items-start gap-3">
                     <h3 className="flex-1 text-[15px] font-semibold">{p.title}</h3>
-                    <button
-                      type="button"
-                      aria-label={`Borrar ${p.title}`}
-                      onClick={() => void projects.remove(p.id)}
-                      className="text-muted-foreground"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
+                    <ConfirmDelete
+                      title={`¿Borrar "${p.title}"?`}
+                      onConfirm={() => projects.remove(p.id)}
+                    />
                   </div>
                   {p.notes ? <p className="mt-1 text-sm text-muted-foreground">{p.notes}</p> : null}
                   <div className="mt-2 flex flex-wrap gap-2 text-xs text-muted-foreground">

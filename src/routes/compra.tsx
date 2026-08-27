@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Check, Minus, Plus, Star, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/AppShell";
+import { ConfirmDelete } from "@/components/ConfirmDelete";
 import { SectionCard, EmptyHint } from "@/components/SectionCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -132,14 +133,11 @@ function CompraPage() {
                       >
                         <Star className={cn("h-4 w-4", p.staple && "fill-current")} />
                       </button>
-                      <button
-                        type="button"
-                        aria-label={`Borrar ${p.name}`}
-                        onClick={() => void products.remove(p.id)}
-                        className="p-1 text-muted-foreground"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
+                      <ConfirmDelete
+                        title={`¿Borrar ${p.name} del catálogo?`}
+                        description="Se quitará también de la lista actual."
+                        onConfirm={() => products.remove(p.id)}
+                      />
                     </div>
                   ) : null}
                 </div>
@@ -158,13 +156,17 @@ function CompraPage() {
         title={`Lista (${pending.length})`}
         action={
           lines.length > 0 ? (
-            <button
-              type="button"
-              onClick={() => void shopping.clearAllLines()}
-              className="text-xs font-semibold text-muted-foreground"
-            >
-              Vaciar
-            </button>
+            <ConfirmDelete
+              title="¿Vaciar la lista de la compra?"
+              description="Se quitarán todas las líneas. El catálogo de productos se mantiene."
+              label="Vaciar"
+              onConfirm={() => shopping.clearAllLines()}
+              trigger={
+                <button type="button" className="text-xs font-semibold text-muted-foreground">
+                  Vaciar
+                </button>
+              }
+            />
           ) : null
         }
       >

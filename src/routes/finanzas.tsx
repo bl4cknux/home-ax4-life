@@ -9,7 +9,6 @@ import {
   startOfWeek,
 } from "date-fns";
 import { es } from "date-fns/locale";
-import { Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/AppShell";
 import { ConfirmDelete } from "@/components/ConfirmDelete";
 import { SectionCard, EmptyHint } from "@/components/SectionCard";

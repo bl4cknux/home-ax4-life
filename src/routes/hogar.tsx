@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/AppShell";
 import { ConfirmDelete } from "@/components/ConfirmDelete";
 import { EmptyHint } from "@/components/SectionCard";

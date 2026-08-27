@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { PageHeader } from "@/components/AppShell";
+import { ConfirmDelete } from "@/components/ConfirmDelete";
 import { SectionCard } from "@/components/SectionCard";
 import { Button } from "@/components/ui/button";
 import { clearAll } from "@/lib/repos";
@@ -96,16 +97,20 @@ function AjustesPage() {
       </SectionCard>
 
       <SectionCard title="Zona peligrosa">
-        <Button
-          variant="destructive"
-          className="rounded-xl"
-          onClick={async () => {
+        <ConfirmDelete
+          title="¿Borrar todos los datos?"
+          description="Se eliminarán personas, movimientos, recordatorios, listas y viajes de este dispositivo. Exporta antes una copia si quieres conservarlos."
+          label="Borrar todo"
+          onConfirm={async () => {
             await clearAll();
             toast.success("Datos borrados");
           }}
-        >
-          Borrar todos los datos
-        </Button>
+          trigger={
+            <Button variant="destructive" className="rounded-xl">
+              Borrar todos los datos
+            </Button>
+          }
+        />
       </SectionCard>
     </div>
   );

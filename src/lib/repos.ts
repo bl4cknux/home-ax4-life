@@ -1,3 +1,4 @@
+import { nextOccurrence } from "./recurrence";
 import { getDb, uid, TABLE_NAMES, type TableName } from "./db";
 import type {
   Movement,
